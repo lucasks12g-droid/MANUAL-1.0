@@ -1,0 +1,337 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@400;600&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --azul:#003DA5;--azul-claro:#1565C0;--azul-bg:#E8F0FE;
+    --verde:#1B5E20;--verde-bg:#E8F5E9;
+    --laranja:#E65100;--laranja-bg:#FFF3E0;
+    --vermelho:#B71C1C;--vermelho-bg:#FFEBEE;
+    --cinza:#F5F5F5;--borda:#DDDDDD;--texto:#1A1A1A;--sub:#555;
+  }
+  body{font-family:'Source Sans 3',sans-serif;color:var(--texto);background:#fff}
+
+  .header{background:var(--azul);color:#fff;padding:0}
+  .header-top{background:#001f6b;padding:6px 24px;display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:.4px;color:rgba(255,255,255,.75)}
+  .header-top span{display:flex;align-items:center;gap:6px}
+
+  .header-main{padding:14px 24px;display:flex;align-items:center;gap:20px}
+  .logo-wrap{background:#fff;border-radius:10px;padding:8px 14px;display:flex;align-items:center;justify-content:center;min-width:160px}
+  .logo-wrap img{height:52px;display:block}
+  .header-divider{width:1px;height:52px;background:rgba(255,255,255,.25)}
+  .header-title h1{font-size:17px;font-weight:600;margin-bottom:2px}
+  .header-title p{font-size:12px;opacity:.75}
+  .header-badge{margin-left:auto;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:6px 12px;text-align:right;font-size:11px;color:rgba(255,255,255,.8)}
+  .header-badge strong{display:block;font-size:13px;color:#fff}
+
+  .header-nav{background:#1a4a9e;padding:0 24px;display:flex;gap:0;border-top:1px solid rgba(255,255,255,.1);overflow-x:auto}
+  .header-nav button{background:transparent;border:none;color:rgba(255,255,255,.8);padding:11px 15px;font-size:13px;cursor:pointer;white-space:nowrap;font-family:inherit;border-bottom:3px solid transparent;transition:all .2s}
+  .header-nav button:hover,.header-nav button.ativo{color:#fff;border-bottom-color:#fff;background:rgba(255,255,255,.08)}
+
+  .aviso{background:#FFF9C4;border-left:4px solid #F9A825;padding:9px 16px;font-size:12px;color:#5D4037;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F0E68C}
+
+  .layout{display:grid;grid-template-columns:230px 1fr;min-height:580px}
+  .sidebar{background:var(--cinza);border-right:1px solid var(--borda);padding:14px 0}
+  .sidebar-titulo{font-size:10px;font-weight:600;letter-spacing:1px;color:var(--sub);padding:8px 16px 4px;text-transform:uppercase}
+  .sidebar-item{padding:8px 16px;font-size:13px;cursor:pointer;border-left:3px solid transparent;display:flex;align-items:center;gap:8px;transition:all .15s;color:var(--texto)}
+  .sidebar-item:hover{background:#ebebeb}
+  .sidebar-item.ativo{background:#dce8ff;border-left-color:var(--azul);color:var(--azul);font-weight:500}
+  .sidebar-item .badge{margin-left:auto;font-size:10px;background:#e0e0e0;padding:2px 6px;border-radius:10px;color:var(--sub)}
+  .sidebar-item.ativo .badge{background:var(--azul);color:#fff}
+
+  .conteudo{padding:24px 28px}
+  .secao{display:none}
+  .secao.visivel{display:block}
+
+  .pagina-titulo{font-size:20px;font-weight:600;color:var(--azul);margin-bottom:3px;font-family:'Source Serif 4',serif}
+  .pagina-sub{font-size:13px;color:var(--sub);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--borda)}
+
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:20px}
+  .card-stat{background:var(--azul-bg);border:1px solid #c5d8fc;border-radius:8px;padding:14px}
+  .card-stat .num{font-size:26px;font-weight:600;color:var(--azul)}
+  .card-stat .label{font-size:12px;color:#1a44a0;margin-top:2px}
+
+  .proc-lista{display:flex;flex-direction:column;gap:10px}
+  .proc-item{border:1px solid var(--borda);border-radius:8px;overflow:hidden}
+  .proc-header{background:var(--cinza);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .15s}
+  .proc-header:hover{background:#ebebeb}
+  .proc-header-left{display:flex;align-items:center;gap:10px}
+  .proc-cod{background:var(--azul);color:#fff;font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;font-family:monospace}
+  .proc-nome{font-size:14px;font-weight:500}
+  .proc-tags{display:flex;gap:5px}
+  .tag{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}
+  .tag-veiculo{background:var(--azul-bg);color:#1a44a0}
+  .tag-habilitacao{background:var(--verde-bg);color:var(--verde)}
+  .tag-urgente{background:var(--vermelho-bg);color:var(--vermelho)}
+  .tag-digital{background:#E8F5E9;color:#2E7D32}
+  .proc-seta{font-size:11px;color:var(--sub);transition:transform .2s;margin-left:6px}
+  .proc-item.aberto .proc-seta{transform:rotate(180deg)}
+
+  .proc-body{display:none;padding:14px;border-top:1px solid var(--borda);background:#fff}
+  .proc-item.aberto .proc-body{display:block}
+
+  .passo-lista{display:flex;flex-direction:column;gap:9px;margin:10px 0}
+  .passo{display:flex;gap:10px;align-items:flex-start}
+  .passo-num{width:24px;height:24px;border-radius:50%;background:var(--azul);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .passo-txt{font-size:13px;line-height:1.6;color:var(--texto);padding-top:3px}
+
+  .doc-lista{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}
+  .doc-item{background:var(--cinza);border:1px solid var(--borda);border-radius:6px;padding:5px 10px;font-size:12px;display:flex;align-items:center;gap:5px}
+  .doc-icone{width:12px;height:15px;background:var(--azul);border-radius:2px;display:inline-block;flex-shrink:0}
+
+  .info-box{border-radius:6px;padding:10px 12px;font-size:12px;line-height:1.6;margin:8px 0;display:flex;gap:8px}
+  .info-box.dica{background:var(--azul-bg);border:1px solid #c5d8fc;color:#1a44a0}
+  .info-box.aviso-box{background:var(--laranja-bg);border:1px solid #FFCC80;color:#BF360C}
+  .info-box.prazo{background:var(--verde-bg);border:1px solid #A5D6A7;color:var(--verde)}
+  .info-icone{font-size:14px;flex-shrink:0}
+
+  .tabela-taxas{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+  .tabela-taxas th{background:var(--azul);color:#fff;padding:8px 10px;text-align:left;font-weight:500}
+  .tabela-taxas td{padding:7px 10px;border-bottom:1px solid var(--borda)}
+  .tabela-taxas tr:nth-child(even) td{background:var(--cinza)}
+  .tabela-taxas .valor{font-weight:500;color:var(--azul)}
+
+  .secao-h2{font-size:14px;font-weight:600;color:var(--azul);margin:16px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--borda)}
+
+  .btn-action{background:var(--azul);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500;transition:background .15s}
+  .btn-action:hover{background:var(--azul-claro)}
+  .btn-outline{background:transparent;color:var(--azul);border:1px solid var(--azul);padding:8px 16px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500;margin-left:8px}
+
+  .footer{background:#001f6b;color:rgba(255,255,255,.65);padding:14px 24px;font-size:11px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .footer-logo{background:#fff;border-radius:6px;padding:4px 10px}
+  .footer-logo img{height:24px;display:block}
+  .footer-txt{text-align:right}
+  .footer-txt span{color:rgba(255,255,255,.9)}
+</style>
+
+<div class="header">
+  <div class="header-top">
+    <span>📋 Manual de Procedimentos — DETRAN-PR</span>
+    <span>Atualizado em 2025</span>
+  </div>
+  <div class="header-main">
+    <div class="logo-wrap">
+      <img src="data:image/png;base64,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" alt="Despachante Isabel">
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-title">
+      <h1>Manual de Procedimentos</h1>
+      <p>Serviços DETRAN-PR — Guia Completo 2025</p>
+    </div>
+    <div class="header-badge">
+      <strong>📞 Atendimento</strong>
+      Curitiba — PR
+    </div>
+  </div>
+  <div class="header-nav">
+    <button class="ativo" onclick="aba('inicio',this)">Início</button>
+    <button onclick="aba('veiculos',this)">Veículos</button>
+    <button onclick="aba('habilitacao',this)">Habilitação</button>
+    <button onclick="aba('infracoes',this)">Infrações e Multas</button>
+    <button onclick="aba('taxas',this)">Taxas e Prazos</button>
+    <button onclick="aba('atendimento',this)">Contato</button>
+  </div>
+</div>
+
+<div class="aviso">
+  <span>ℹ</span>
+  <span>Manual informativo — Os procedimentos seguem as normas do DETRAN-PR vigentes em 2025. Consulte sempre um despachante para orientação personalizada.</span>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-titulo">Serviços</div>
+    <div class="sidebar-item ativo" onclick="aba('inicio',null);marcaSidebar(this)">🏠 Página inicial</div>
+    <div class="sidebar-titulo" style="margin-top:8px">Veículos</div>
+    <div class="sidebar-item" onclick="aba('veiculos',null);marcaSidebar(this)">🚗 Transferência <span class="badge">5 passos</span></div>
+    <div class="sidebar-item" onclick="aba('veiculos',null);marcaSidebar(this)">📋 Licenciamento <span class="badge">4 passos</span></div>
+    <div class="sidebar-item" onclick="aba('veiculos',null);marcaSidebar(this)">📢 Comunicação de venda</div>
+    <div class="sidebar-titulo" style="margin-top:8px">Habilitação</div>
+    <div class="sidebar-item" onclick="aba('habilitacao',null);marcaSidebar(this)">🪪 1ª habilitação <span class="badge">8 passos</span></div>
+    <div class="sidebar-item" onclick="aba('habilitacao',null);marcaSidebar(this)">♻️ Renovação CNH <span class="badge">4 passos</span></div>
+    <div class="sidebar-titulo" style="margin-top:8px">Outros</div>
+    <div class="sidebar-item" onclick="aba('infracoes',null);marcaSidebar(this)">🚦 Multas e recursos</div>
+    <div class="sidebar-item" onclick="aba('taxas',null);marcaSidebar(this)">💰 Taxas 2025</div>
+    <div class="sidebar-item" onclick="aba('atendimento',null);marcaSidebar(this)">📍 Contato</div>
+  </div>
+
+  <div class="conteudo">
+
+    <div class="secao visivel" id="sec-inicio">
+      <div class="pagina-titulo">Bem-vindo ao Manual da Despachante Isabel</div>
+      <div class="pagina-sub">Consulte os principais procedimentos do DETRAN-PR com orientação especializada</div>
+      <div class="card-grid">
+        <div class="card-stat"><div class="num">18</div><div class="label">Serviços documentados</div></div>
+        <div class="card-stat"><div class="num">12</div><div class="label">Disponíveis online</div></div>
+        <div class="card-stat"><div class="num">30</div><div class="label">Anos de experiência</div></div>
+        <div class="card-stat"><div class="num">2025</div><div class="label">Versão atualizada</div></div>
+      </div>
+      <div class="secao-h2">Serviços mais procurados</div>
+      <div class="proc-lista">
+        <div class="proc-item" onclick="aba('veiculos',null)"><div class="proc-header"><div class="proc-header-left"><span class="proc-cod">VEI-01</span><span class="proc-nome">Transferência de propriedade de veículo</span></div><div class="proc-tags"><span class="tag tag-veiculo">Veículo</span></div></div></div>
+        <div class="proc-item" onclick="aba('habilitacao',null)"><div class="proc-header"><div class="proc-header-left"><span class="proc-cod">HAB-03</span><span class="proc-nome">Renovação de CNH</span></div><div class="proc-tags"><span class="tag tag-habilitacao">Habilitação</span><span class="tag tag-digital">Online</span></div></div></div>
+        <div class="proc-item" onclick="aba('infracoes',null)"><div class="proc-header"><div class="proc-header-left"><span class="proc-cod">MUL-01</span><span class="proc-nome">Consulta e pagamento de multas</span></div><div class="proc-tags"><span class="tag tag-digital">Online</span></div></div></div>
+      </div>
+      <div class="info-box dica" style="margin-top:16px"><span class="info-icone">💡</span><div>Precisa de ajuda com algum procedimento? A <strong>Despachante Isabel</strong> pode cuidar de tudo por você. Entre em contato!</div></div>
+    </div>
+
+    <div class="secao" id="sec-veiculos">
+      <div class="pagina-titulo">Procedimentos — Veículos</div>
+      <div class="pagina-sub">Transferência, licenciamento, emplacamento e outros serviços</div>
+      <div class="proc-lista">
+        <div class="proc-item" onclick="toggle(this)">
+          <div class="proc-header"><div class="proc-header-left"><span class="proc-cod">VEI-01</span><span class="proc-nome">Transferência de propriedade</span></div><div class="proc-tags"><span class="tag tag-veiculo">Veículo</span><span class="proc-seta">▼</span></div></div>
+          <div class="proc-body">
+            <div class="info-box prazo"><span class="info-icone">⏱</span><div><strong>Prazo:</strong> 30 dias a partir da data de compra para efetuar a transferência.</div></div>
+            <div class="secao-h2">Documentos necessários</div>
+            <div class="doc-lista">
+              <div class="doc-item"><div class="doc-icone"></div>CRV (DUT) assinado pelo vendedor</div>
+              <div class="doc-item"><div class="doc-icone"></div>RG e CPF do comprador</div>
+              <div class="doc-item"><div class="doc-icone"></div>Comprovante de residência atualizado</div>
+              <div class="doc-item"><div class="doc-icone"></div>CRLV vigente do veículo</div>
+              <div class="doc-item"><div class="doc-icone"></div>Laudo de vistoria aprovado</div>
+            </div>
+            <div class="secao-h2">Passo a passo</div>
+            <div class="passo-lista">
+              <div class="passo"><div class="passo-num">1</div><div class="passo-txt">Solicitar vistoria do veículo em posto credenciado pelo DETRAN-PR.</div></div>
+              <div class="passo"><div class="passo-num">2</div><div class="passo-txt">Acessar o Portal de Serviços do DETRAN-PR e iniciar o processo de transferência.</div></div>
+              <div class="passo"><div class="passo-num">3</div><div class="passo-txt">Gerar e pagar o boleto das taxas de transferência.</div></div>
+              <div class="passo"><div class="passo-num">4</div><div class="passo-txt">Enviar os documentos digitalizados ou comparecer ao posto de atendimento.</div></div>
+              <div class="passo"><div class="passo-num">5</div><div class="passo-txt">Aguardar processamento (até 10 dias úteis) e baixar o novo CRLV digital.</div></div>
+            </div>
+            <div class="info-box dica"><span class="info-icone">💡</span><div>A Despachante Isabel pode realizar todo este processo por você, sem filas!</div></div>
+          </div>
+        </div>
+        <div class="proc-item" onclick="toggle(this)">
+          <div class="proc-header"><div class="proc-header-left"><span class="proc-cod">VEI-02</span><span class="proc-nome">Licenciamento anual (CRLV)</span></div><div class="proc-tags"><span class="tag tag-veiculo">Veículo</span><span class="tag tag-digital">Online</span><span class="proc-seta">▼</span></div></div>
+          <div class="proc-body">
+            <div class="info-box aviso-box"><span class="info-icone">⚠</span><div>Atraso no licenciamento gera multa e pontuação na CNH. Regularize dentro do prazo!</div></div>
+            <div class="passo-lista">
+              <div class="passo"><div class="passo-num">1</div><div class="passo-txt">Verificar pendências do veículo no portal (multas, IPVA em aberto).</div></div>
+              <div class="passo"><div class="passo-num">2</div><div class="passo-txt">Quitar todos os débitos existentes.</div></div>
+              <div class="passo"><div class="passo-num">3</div><div class="passo-txt">Pagar a taxa de licenciamento gerada automaticamente no portal.</div></div>
+              <div class="passo"><div class="passo-num">4</div><div class="passo-txt">CRLV digital fica disponível no portal e no app após confirmação do pagamento.</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="proc-item" onclick="toggle(this)">
+          <div class="proc-header"><div class="proc-header-left"><span class="proc-cod">VEI-03</span><span class="proc-nome">Comunicação de venda</span></div><div class="proc-tags"><span class="tag tag-digital">Online</span><span class="proc-seta">▼</span></div></div>
+          <div class="proc-body">
+            <div class="info-box prazo"><span class="info-icone">⏱</span><div>Registre em até 30 dias para se isentar de multas geradas após a venda.</div></div>
+            <div class="passo-lista">
+              <div class="passo"><div class="passo-num">1</div><div class="passo-txt">Acesse detran.pr.gov.br com sua conta Gov.br.</div></div>
+              <div class="passo"><div class="passo-num">2</div><div class="passo-txt">Acesse "Comunicação de Venda" e preencha os dados do comprador.</div></div>
+              <div class="passo"><div class="passo-num">3</div><div class="passo-txt">Confirme e guarde o protocolo gerado. Serviço gratuito.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="secao" id="sec-habilitacao">
+      <div class="pagina-titulo">Procedimentos — Habilitação</div>
+      <div class="pagina-sub">CNH, renovação, mudança de categoria e demais serviços de habilitação</div>
+      <div class="proc-lista">
+        <div class="proc-item" onclick="toggle(this)">
+          <div class="proc-header"><div class="proc-header-left"><span class="proc-cod">HAB-01</span><span class="proc-nome">Primeira habilitação (CNH)</span></div><div class="proc-tags"><span class="tag tag-habilitacao">Habilitação</span><span class="proc-seta">▼</span></div></div>
+          <div class="proc-body">
+            <div class="doc-lista">
+              <div class="doc-item"><div class="doc-icone"></div>RG ou documento oficial com foto</div>
+              <div class="doc-item"><div class="doc-icone"></div>CPF</div>
+              <div class="doc-item"><div class="doc-icone"></div>Comprovante de residência (máx. 3 meses)</div>
+              <div class="doc-item"><div class="doc-icone"></div>Foto 3x4 recente</div>
+            </div>
+            <div class="secao-h2">Etapas do processo</div>
+            <div class="passo-lista">
+              <div class="passo"><div class="passo-num">1</div><div class="passo-txt">Cadastro no portal DETRAN-PR e abertura do processo.</div></div>
+              <div class="passo"><div class="passo-num">2</div><div class="passo-txt">Exame médico em clínica credenciada.</div></div>
+              <div class="passo"><div class="passo-num">3</div><div class="passo-txt">Exame psicológico em clínica credenciada.</div></div>
+              <div class="passo"><div class="passo-num">4</div><div class="passo-txt">Matrícula em autoescola (CFC) credenciada pelo DETRAN-PR.</div></div>
+              <div class="passo"><div class="passo-num">5</div><div class="passo-txt">Curso teórico de legislação de trânsito (mínimo 45 horas).</div></div>
+              <div class="passo"><div class="passo-num">6</div><div class="passo-txt">Prova teórica no DETRAN-PR (mín. 21 acertos em 30 questões).</div></div>
+              <div class="passo"><div class="passo-num">7</div><div class="passo-txt">Aulas práticas de direção (mínimo 20 horas/aula).</div></div>
+              <div class="passo"><div class="passo-num">8</div><div class="passo-txt">Exame de direção veicular com examinador do DETRAN-PR.</div></div>
+            </div>
+            <div class="info-box dica"><span class="info-icone">💡</span><div>O candidato tem 12 meses para concluir todas as etapas após abertura do processo.</div></div>
+          </div>
+        </div>
+        <div class="proc-item" onclick="toggle(this)">
+          <div class="proc-header"><div class="proc-header-left"><span class="proc-cod">HAB-03</span><span class="proc-nome">Renovação de CNH</span></div><div class="proc-tags"><span class="tag tag-habilitacao">Habilitação</span><span class="tag tag-digital">Online</span><span class="proc-seta">▼</span></div></div>
+          <div class="proc-body">
+            <div class="info-box aviso-box"><span class="info-icone">⚠</span><div>CNH vencida há mais de 30 dias: infração gravíssima (7 pontos + multa R$ 880,41).</div></div>
+            <div class="passo-lista">
+              <div class="passo"><div class="passo-num">1</div><div class="passo-txt">Agende exame médico em clínica credenciada pelo DETRAN-PR.</div></div>
+              <div class="passo"><div class="passo-num">2</div><div class="passo-txt">Realize exame psicológico (obrigatório para cat. C, D e E).</div></div>
+              <div class="passo"><div class="passo-num">3</div><div class="passo-txt">Acesse o portal, gere e pague o boleto de renovação.</div></div>
+              <div class="passo"><div class="passo-num">4</div><div class="passo-txt">CNH digital é atualizada em até 5 dias úteis após confirmação do pagamento.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="secao" id="sec-infracoes">
+      <div class="pagina-titulo">Infrações e Multas</div>
+      <div class="pagina-sub">Consulta, defesa, recurso e pagamento de penalidades de trânsito</div>
+      <div class="proc-lista">
+        <div class="proc-item" onclick="toggle(this)">
+          <div class="proc-header"><div class="proc-header-left"><span class="proc-cod">MUL-01</span><span class="proc-nome">Consulta e pagamento de multas</span></div><div class="proc-tags"><span class="tag tag-digital">Online</span><span class="proc-seta">▼</span></div></div>
+          <div class="proc-body">
+            <div class="passo-lista">
+              <div class="passo"><div class="passo-num">1</div><div class="passo-txt">Acesse detran.pr.gov.br → "Veículos" → "Consulta de débitos".</div></div>
+              <div class="passo"><div class="passo-num">2</div><div class="passo-txt">Informe o RENAVAM e placa do veículo.</div></div>
+              <div class="passo"><div class="passo-num">3</div><div class="passo-txt">Selecione as multas e gere o boleto ou Pix.</div></div>
+            </div>
+            <div class="info-box dica"><span class="info-icone">💡</span><div>Desconto de <strong>40%</strong> disponível para condutores sem infrações nos últimos 12 meses.</div></div>
+          </div>
+        </div>
+        <div class="proc-item" onclick="toggle(this)">
+          <div class="proc-header"><div class="proc-header-left"><span class="proc-cod">MUL-02</span><span class="proc-nome">Recurso de multa — JARI</span></div><div class="proc-tags"><span class="tag tag-urgente">Prazo!</span><span class="proc-seta">▼</span></div></div>
+          <div class="proc-body">
+            <div class="info-box aviso-box"><span class="info-icone">⚠</span><div>Recurso deve ser interposto em até <strong>30 dias</strong> após a notificação da autuação.</div></div>
+            <div class="passo-lista">
+              <div class="passo"><div class="passo-num">1</div><div class="passo-txt">Acesse o portal DETRAN-PR e localize a infração em "Meus processos".</div></div>
+              <div class="passo"><div class="passo-num">2</div><div class="passo-txt">Clique em "Interpor recurso" e preencha as razões de defesa.</div></div>
+              <div class="passo"><div class="passo-num">3</div><div class="passo-txt">Anexe documentos e provas (fotos, testemunhos, laudos).</div></div>
+              <div class="passo"><div class="passo-num">4</div><div class="passo-txt">Acompanhe o andamento em "Meus processos" no portal.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="secao" id="sec-taxas">
+      <div class="pagina-titulo">Taxas e Prazos 2025</div>
+      <div class="pagina-sub">Tabela de referência das principais taxas do DETRAN-PR</div>
+      <div class="info-box aviso-box" style="margin-bottom:14px"><span class="info-icone">⚠</span><div>Valores de referência. Confirme no portal oficial antes de efetuar pagamentos.</div></div>
+      <div class="secao-h2">Taxas de veículos</div>
+      <table class="tabela-taxas">
+        <thead><tr><th>Serviço</th><th>Prazo</th><th>Valor (R$)</th></tr></thead>
+        <tbody>
+          <tr><td>Transferência de propriedade</td><td>10 dias úteis</td><td class="valor">209,95</td></tr>
+          <tr><td>Licenciamento anual (CRLV)</td><td>3 dias úteis</td><td class="valor">87,40</td></tr>
+          <tr><td>Segunda via do CRLV</td><td>5 dias úteis</td><td class="valor">73,20</td></tr>
+          <tr><td>Vistoria de transferência</td><td>No ato</td><td class="valor">119,00</td></tr>
+          <tr><td>Comunicação de venda</td><td>1 dia útil</td><td class="valor">Gratuito</td></tr>
+        </tbody>
+      </table>
+      <div class="secao-h2">Taxas de habilitação</div>
+      <table class="tabela-taxas">
+        <thead><tr><th>Serviço</th><th>Prazo</th><th>Valor (R$)</th></tr></thead>
+        <tbody>
+          <tr><td>Abertura processo 1ª habilitação</td><td>—</td><td class="valor">143,20</td></tr>
+          <tr><td>Renovação CNH (cat. A/B)</td><td>5 dias úteis</td><td class="valor">187,60</td></tr>
+          <tr><td>Renovação CNH (cat. C/D/E)</td><td>5 dias úteis</td><td class="valor">207,80</td></tr>
+          <tr><td>Segunda via de CNH</td><td>5 dias úteis</td><td class="valor">164,30</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="secao" id="sec-atendimento">
+      <div class="pagina-titulo">Contato — Despachante Isabel</div>
+      <div class="pagina-sub">Fale conosco e resolva seus serviços sem complicação</div>
+      <div class="info-box prazo" style="margin-bottom:16px"><span class="info-icone">⭐</span><div>A Despachante Isabel cuida de todos os seus procedimentos no DETRAN-PR. Sem filas, sem estresse!</div></div>
+      <div class="secao-h2">Nossos serviços</div>
+      <div class="doc-lista">
+        <div class="doc-item"><div class="doc-icone"></div>Transferência de veículos</div>
+        <div class="doc-item"><div c
